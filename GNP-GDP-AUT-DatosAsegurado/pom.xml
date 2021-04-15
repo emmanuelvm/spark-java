@@ -1,0 +1,110 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+	
+	<name>GNP-GDP-AUT-DatosAsegurado</name>
+	<groupId>emision.noeconomico</groupId>
+  	<artifactId>GNP-GDP-AUT-DatosAsegurado</artifactId>
+  	<version>1.0</version>
+  	<packaging>jar</packaging>
+  	<url>https://trend-it.com.mx</url>
+
+	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+    	<maven.compiler.target>1.8</maven.compiler.target>
+  		<encoding>UTF-8</encoding>
+    	<scala.version>2.11.8</scala.version>
+		<scala.compat.version>2.11</scala.compat.version>
+		<spec2.version>4.2.0</spec2.version>
+		<spark.version>2.4.4</spark.version>
+		<junit.version>4.13-beta-1</junit.version>
+		<gcloud.workspace>gs://gnp-dlk-qa-workspaces/autos</gcloud.workspace>
+		<delta.centauri.version>1.0</delta.centauri.version>
+  	</properties>
+  	
+  	<repositories>
+		<repository>
+	 		<id>dlk_releases</id>
+	 		<url>http://nexus.gnp.mx/repository/dlk_releases/</url>
+		</repository>
+ 	</repositories>
+  	
+	<dependencies>
+		<dependency>
+			<groupId>mx.com.gnp.datalake.gcp.ingesta</groupId>
+			<artifactId>GNP-GDP-AUT-DeltaCentauri</artifactId>
+			<version>${delta.centauri.version}</version>
+		</dependency>
+		<dependency>
+	  		<groupId>org.apache.spark</groupId>
+	  		<artifactId>spark-core_2.11</artifactId>
+	  		<version>${spark.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.spark</groupId>
+		  	<artifactId>spark-mllib_2.11</artifactId>
+		  	<version>${spark.version}</version>   
+		</dependency>
+		<dependency>
+  			<groupId>org.apache.spark</groupId>
+  			<artifactId>spark-sql_2.11</artifactId>
+  			<version>${spark.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.spark</groupId>
+		    <artifactId>spark-avro_2.11</artifactId>
+		    <version>${spark.version}</version>
+		</dependency>
+		<dependency>
+    		<groupId>junit</groupId>
+    		<artifactId>junit</artifactId>
+    		<version>${junit.version}</version>
+		</dependency>
+	</dependencies>
+
+  	<build>
+		<finalName>${project.artifactId}</finalName>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>2.4.1</version>
+					<configuration>
+						<!-- get all project dependencies -->
+						<!--<descriptorRefs>
+							<descriptorRef>jar-with-dependencies</descriptorRef>
+						</descriptorRefs>-->
+						<!-- MainClass in mainfest make a executable jar -->
+						<archive>
+						  <manifest>
+							<mainClass>mx.com.gnp.datalake.gcp.autos.emision.noeconomico.AutDatosAsegurado</mainClass>
+						  </manifest>
+						</archive>
+					</configuration>
+					
+				</plugin>
+				<plugin>
+		  			<groupId>org.apache.maven.plugins</groupId>
+		  			<artifactId>maven-jar-plugin</artifactId>
+		  			<configuration>
+		    			<archive>
+		      				<manifest>
+			        			<addClasspath>true</addClasspath>
+			        			<classpathPrefix>lib/</classpathPrefix>
+			        			<mainClass>mx.com.gnp.datalake.gcp.autos.emision.noeconomico.AutDatosAseguradoApp</mainClass>
+		      				</manifest>
+		    			</archive>
+		  			</configuration>
+				</plugin>
+			</plugins>
+
+		<extensions>
+        	<extension>
+              <groupId>com.lahsivjar</groupId>
+              <artifactId>gcp-storage-wagon</artifactId>
+              <version>2.1</version>
+          </extension>
+    	</extensions>
+    	
+	</build>
+</project>
